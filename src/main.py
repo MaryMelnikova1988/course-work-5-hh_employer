@@ -20,10 +20,10 @@ def main():
         #     '5060211#main'  # ГК АСтра
     ]
     params = config()
-    data = get_hh_data(employer_ids)
+    # data = get_hh_data(employer_ids)
     # pprint(data)
     create_database(db_name, params)
-    save_data_to_database(data, db_name, params)
+    # save_data_to_database(data, db_name, params)
 
 
 if __name__ == '__main__':
