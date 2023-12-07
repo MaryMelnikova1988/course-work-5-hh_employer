@@ -1,13 +1,13 @@
 from pprint import pprint
 
 from src.config import config
-from src.utils import get_hh_data, create_database, save_data_to_database
+from src.utils import get_hh_data, create_database, save_data_to_database, get_hh_employers, get_hh_vacancies
 
 
 def main():
     db_name = 'hh'
     employer_ids = [
-        1740,  # яндекс
+        # 1740,  # яндекс
         2180,  # озон
         67611,  # тензор
         3529,  # сбер
@@ -20,9 +20,14 @@ def main():
         #     '5060211#main'  # ГК АСтра
     ]
     params = config()
-    # data = get_hh_data(employer_ids)
-    # pprint(data)
-    create_database(db_name, params)
+    data = get_hh_employers(employer_ids)
+    pprint(data)
+    pprint(len(data))
+    data1 = get_hh_vacancies(employer_ids)
+    pprint(data1)
+    pprint(len(data1))
+
+    # create_database(db_name, params)
     # save_data_to_database(data, db_name, params)
 
 
