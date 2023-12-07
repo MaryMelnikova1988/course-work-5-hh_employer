@@ -19,6 +19,13 @@ def get_hh_employers(employer_ids: list) -> list[dict[str, Any]]:
 
 def get_hh_vacancies(employer_ids: list) -> list[dict[str, Any]]:
     """Получение данных о вакансиях по работодателям с hh.ru через API"""
+    params = {
+            'area': 113,
+            'only_with_salary': True,
+            'page': 1,
+            'per_page': 100,
+            'currency': 'RUR'
+        }
     vacancies = []
     for employer_id in employer_ids:
         url = f'https://api.hh.ru/employers/{employer_id}'
@@ -63,6 +70,7 @@ def create_database(db_name: str, params: dict) -> None:
                   vacancy_id SERIAL PRIMARY KEY,
                   employer_id varchar REFERENCES employers(employer_id),
                   vacancy_name VARCHAR(255) NOT NULL,
+                  vacancy_salary int,
                   vacancy_url TEXT                  
              );
 
@@ -84,7 +92,7 @@ def save_employers_to_database(employers: list[dict[str, Any]], db_name: str, pa
             employer_open_vacancies = employer['employer'][2]
             cur.execute(
                 """
-                INSERT INTO employers (employer_id , employer_name, employer_open_vacancies)
+                INSERT INTO employers (employer_id ,employer_name, employer_open_vacancies)
                 VALUES (%s, %s, %s)
                 """,
                 (employer_id, employer_name, employer_open_vacancies)
@@ -100,20 +108,30 @@ def save_vacancies_to_database(vacancies: list[dict[str, Any]], db_name: str, pa
 
     with conn.cursor() as cur:
         for vacancy in vacancies:
-            # vacancy_name = vacancy['vacancy_name']
-            # vacancy_salary = vacancy['vacancy_salary']
-            # vacancy_snippet = vacancy['vacancy_snippet']
-            # vacancy_url = vacancy['vacancy_url']
             employer_id = vacancy['vacancy'][0]
             vacancy_name = vacancy['vacancy'][1]
-            # vacancy_salary = vacancy[1]
             vacancy_url = vacancy['vacancy'][4]
+            salary = vacancy['vacancy'][2]
+            vacancy_salary = get_vacancy_salary(salary)
+
             cur.execute(
                 """
-                INSERT INTO vacancies (employer_id, vacancy_name, vacancy_url)
-                VALUES (%s, %s, %s)
+                INSERT INTO vacancies (employer_id, vacancy_name, vacancy_salary, vacancy_url)
+                VALUES (%s, %s, %s, %s)
                 """,
-                (employer_id, vacancy_name, vacancy_url)
+                (employer_id, vacancy_name, vacancy_salary, vacancy_url)
             )
     conn.commit()
     conn.close()
+
+
+def get_vacancy_salary(salary: dict) -> int:
+    """Получение зарплаты из словаря, приведение к типу int"""
+    if salary is not None:
+        if salary['from'] is not None and salary['to'] is not None:
+            return round((salary['from'] + salary['to']) / 2)
+        elif salary['from'] is not None:
+            return salary['from']
+        elif salary['to'] is not None:
+            return salary['to']
+    return None

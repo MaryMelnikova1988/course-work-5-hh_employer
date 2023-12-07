@@ -2,12 +2,13 @@ from pprint import pprint
 
 from src.config import config
 from src.utils import *
+from src.class_DBManager import DBManager
 
 
 def main():
     db_name = 'hh'
     employer_ids = [
-        # 1740,  # яндекс
+        1740,  # яндекс
         2180,  # озон
         67611,  # тензор
         3529,  # сбер
@@ -28,11 +29,13 @@ def main():
     # pprint(len(vacancies))
     # save_data_to_database(data, db_name, params)
 
-    create_database(db_name, params)
-    save_employers_to_database(employers,db_name,params)
-    save_vacancies_to_database(vacancies,db_name, params)
+    # create_database(db_name, params)
+    # save_employers_to_database(employers,db_name,params)
+    # save_vacancies_to_database(vacancies,db_name, params)
+    DBManager.get_companies_and_vacancies_count(db_name)
 
 
 
 if __name__ == '__main__':
     main()
+
