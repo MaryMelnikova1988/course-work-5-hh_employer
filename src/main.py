@@ -1,7 +1,7 @@
 from pprint import pprint
 
 from src.config import config
-from src.utils import get_hh_data, create_database, save_data_to_database, get_hh_employers, get_hh_vacancies
+from src.utils import *
 
 
 def main():
@@ -20,15 +20,18 @@ def main():
         #     '5060211#main'  # ГК АСтра
     ]
     params = config()
-    data = get_hh_employers(employer_ids)
-    pprint(data)
-    pprint(len(data))
-    data1 = get_hh_vacancies(employer_ids)
-    pprint(data1)
-    pprint(len(data1))
-
-    # create_database(db_name, params)
+    employers = get_hh_employers(employer_ids)
+    # pprint(employers)
+    # pprint(len(employers))
+    vacancies = get_hh_vacancies(employer_ids)
+    # pprint(vacancies)
+    # pprint(len(vacancies))
     # save_data_to_database(data, db_name, params)
+
+    create_database(db_name, params)
+    save_employers_to_database(employers,db_name,params)
+    save_vacancies_to_database(vacancies,db_name, params)
+
 
 
 if __name__ == '__main__':
