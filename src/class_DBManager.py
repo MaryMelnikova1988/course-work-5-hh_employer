@@ -74,8 +74,6 @@ JOIN employers USING(employer_id)
         conn.commit()
         conn.close()
 
-
-
     def get_avg_salary_for_vacancy():
         """Получение средней ЗП по вакансии"""
         conn = psycopg2.connect(
@@ -101,7 +99,7 @@ ORDER BY COUNT(*) DESC
         conn.commit()
         conn.close()
 
-    def get_vacancies_with_higher_salary(self):
+    def get_vacancies_with_higher_salary():
         """ Получение списка всех вакансий,
         у которых зарплата выше средней по всем вакансиям"""
 
@@ -120,16 +118,36 @@ WHERE vacancy_salary>(SELECT AVG(vacancy_salary) FROM vacancies)
                       """)
             rows = cur.fetchall()
             table = PrettyTable()
-            table.field_names = ["название компании (работодателя)", "количество открытых вакансий у компании"]
+            table.field_names = ["название вакансии, у которой зарплата выше средней по всем вакансиям"]
             table.add_rows(rows)
             print(table)
 
         conn.commit()
         conn.close()
 
-
-    def get_vacancies_with_keyword(self):
+    def get_vacancies_with_keyword(keyword):
         """Получение списка всех вакансий,
          в названии которых содержатся переданные в метод слова,
           например python"""
-        pass
+        conn = psycopg2.connect(
+            host="localhost",
+            database='hh',
+            user="postgres",
+            password="721719"
+        )
+
+        with conn.cursor() as cur:
+            cur.execute(f"""
+            SELECT employers.employer_name, vacancy_name, vacancy_salary, vacancy_url FROM vacancies
+JOIN employers USING(employer_id)
+WHERE vacancy_name LIKE '%{keyword}%'                        
+                              """)
+            rows = cur.fetchall()
+            table = PrettyTable()
+            table.field_names = ["название компании (работодателя)", "название вакансии", "зарплата, руб",
+                                 "ссылка на вакансию"]
+            table.add_rows(rows)
+            print(table)
+
+        conn.commit()
+        conn.close()
