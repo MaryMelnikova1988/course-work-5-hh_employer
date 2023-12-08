@@ -1,11 +1,12 @@
 from pprint import pprint
 
+from src.class_DBManager import DBManager
 from src.config import config
 from src.utils import *
-from src.class_DBManager import DBManager
 
 
 def main():
+    # исходные данные
     db_name = 'hh'
     employer_ids = [
         1740,  # яндекс
@@ -21,25 +22,24 @@ def main():
         #     '5060211#main'  # ГК АСтра
     ]
     params = config()
+    # получение данныx о работодателях и их вакансиях с API hh.ru
     employers = get_hh_employers(employer_ids)
-    # pprint(employers)
-    # pprint(len(employers))
     vacancies = get_hh_vacancies(employer_ids)
-    # pprint(vacancies)
-    # pprint(len(vacancies))
-    # save_data_to_database(data, db_name, params)
-
+    # pprint(employers)
+    # Создание и сохранение БД PostgreSQL
     create_database(db_name, params)
     print(f"БД {db_name} успешно создана")
-    save_employers_to_database(employers,db_name,params)
-    save_vacancies_to_database(vacancies,db_name, params)
+    save_employers_to_database(employers, db_name, params)
+    save_vacancies_to_database(vacancies, db_name, params)
     print(f"В БД {db_name} успешно добавлены данные о работодателях и их вакансиях")
-    print("Обратите внимание,в базе данных омогут отсутствовать строки, если зарплата работодателями не указана")
+    print("Обратите внимание,в базе данных могут отсутствовать строки, если зарплата работодателями не указана")
+    # работа с БД PostgreSQL
     DBManager.get_companies_and_vacancies_count()
     DBManager.get_all_vacancies()
 
 
-
 if __name__ == '__main__':
+    print("""Здравствуйте, пользователь.Поможем получить информацию о работодателях и их вакансиях в России от 10 интересных компаний:
+    Яндекс, Ozon, Тензор, СБЕР, Банк ВТБ (ПАО),ПСБ (ПАО «Промсвязьбанк»), HeadHunter, VK, 2ГИС, Славнефть-ЯНОС.
+    Процесс пошел, оставайтесь с нами""")
     main()
-
