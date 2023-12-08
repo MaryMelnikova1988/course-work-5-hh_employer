@@ -6,10 +6,17 @@ import requests
 
 def get_hh_employers(employer_ids: list) -> list[dict[str, Any]]:
     """Получение данных о работодателяx(компаниях) с hh.ru через API"""
+    params = {
+        'area': 113,
+        'only_with_salary': True,
+        'page': 1,
+        'per_page': 100,
+        'currency': 'RUR'
+    }
     employers = []
     for employer_id in employer_ids:
         url = f'https://api.hh.ru/employers/{employer_id}'
-        employer_response = requests.get(url).json()
+        employer_response = requests.get(url, params=params).json()
         employer_name = employer_response['name']
         employer_open_vacancies = employer_response['open_vacancies']
         employers.append({'employer': [employer_id, employer_name, employer_open_vacancies]})
@@ -20,17 +27,17 @@ def get_hh_employers(employer_ids: list) -> list[dict[str, Any]]:
 def get_hh_vacancies(employer_ids: list) -> list[dict[str, Any]]:
     """Получение данных о вакансиях по работодателям с hh.ru через API"""
     params = {
-            'area': 113,
-            'only_with_salary': True,
-            'page': 1,
-            'per_page': 100,
-            'currency': 'RUR'
-        }
+        'area': 113,
+        'only_with_salary': True,
+        'page': 1,
+        'per_page': 100,
+        'currency': 'RUR'
+    }
     vacancies = []
     for employer_id in employer_ids:
         url = f'https://api.hh.ru/employers/{employer_id}'
-        employer_response = requests.get(url).json()
-        vacancy_response = requests.get(employer_response['vacancies_url']).json()
+        employer_response = requests.get(url, params=params).json()
+        vacancy_response = requests.get(employer_response['vacancies_url'], params=params).json()
         for i in range(0, len(vacancy_response['items'])):
             vacancy_name = vacancy_response['items'][i]['name']
             vacancy_salary = vacancy_response['items'][i]['salary']

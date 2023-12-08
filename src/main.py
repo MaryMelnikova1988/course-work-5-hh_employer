@@ -29,9 +29,12 @@ def main():
     # pprint(len(vacancies))
     # save_data_to_database(data, db_name, params)
 
-    # create_database(db_name, params)
-    # save_employers_to_database(employers,db_name,params)
-    # save_vacancies_to_database(vacancies,db_name, params)
+    create_database(db_name, params)
+    print(f"БД {db_name} успешно создана")
+    save_employers_to_database(employers,db_name,params)
+    save_vacancies_to_database(vacancies,db_name, params)
+    print(f"В БД {db_name} успешно добавлены данные о работодателях и их вакансиях")
+    print("Обратите внимание,в базе данных омогут отсутствовать строки, если зарплата работодателями не указана")
     DBManager.get_companies_and_vacancies_count()
     DBManager.get_all_vacancies()
 
