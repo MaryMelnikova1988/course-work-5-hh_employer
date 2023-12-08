@@ -23,17 +23,33 @@ class DBManager:
             table.field_names = ["employer_name", "employer_open_vacancies"]
             table.add_rows(rows)
             print(table)
-            # pprint(rows)
-            # data = "\n".join([str(row) for row in rows])
-            # print(data)
 
         conn.commit()
         conn.close()
 
-    def get_all_vacancies(self):
+    def get_all_vacancies():
         """Получение списка всех вакансий с указанием названия компании,
         названия вакансии и зарплаты и ссылки на вакансию"""
-        pass
+        conn = psycopg2.connect(
+            host="localhost",
+            database='hh',
+            user="postgres",
+            password="721719"
+        )
+
+        with conn.cursor() as cur:
+            cur.execute("""
+                     SELECT employers.employer_name, vacancy_name, vacancy_salary, vacancy_url FROM vacancies
+JOIN employers USING(employer_id)
+                          """)
+            rows = cur.fetchall()
+            table = PrettyTable()
+            table.field_names = ["employer_name", "vacancy_name", "vacancy_salary", "vacancy_url"]
+            table.add_rows(rows)
+            print(table)
+
+        conn.commit()
+        conn.close()
 
     def get_avg_salary(self):
         """Получение средней зарплаты по вакансиям"""
