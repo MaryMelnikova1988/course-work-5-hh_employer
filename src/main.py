@@ -32,7 +32,7 @@ def main():
     # create_database(db_name, params)
     # save_employers_to_database(employers,db_name,params)
     # save_vacancies_to_database(vacancies,db_name, params)
-    DBManager.get_companies_and_vacancies_count(db_name)
+    DBManager.get_companies_and_vacancies_count()
 
 
 

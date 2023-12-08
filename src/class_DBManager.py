@@ -1,33 +1,26 @@
-from pprint import pprint
-from prettytable import PrettyTable
-from src.config import config
-
 import psycopg2
+from prettytable import PrettyTable
 
 
 class DBManager:
     """Класс, который будет подключаться к БД PostgreSQL"""
 
-    def __init__(self, db_name, params=config()):
-        self.db_name = db_name
-        self.params = params
-
-    def get_companies_and_vacancies_count(self):
+    def get_companies_and_vacancies_count():
         """Получение списка всех компаний и количество вакансий у каждой компании"""
-        # conn = psycopg2.connect(database=self.db_name, **self.params)
         conn = psycopg2.connect(
             host="localhost",
-            database="hh",
+            database='hh',
             user="postgres",
             password="721719"
         )
+
         with conn.cursor() as cur:
             cur.execute("""
                   select employer_name, employer_open_vacancies from employers
                       """)
             rows = cur.fetchall()
-            table=PrettyTable()
-            table.field_names=["employer_name", "employer_open_vacancies"]
+            table = PrettyTable()
+            table.field_names = ["employer_name", "employer_open_vacancies"]
             table.add_rows(rows)
             print(table)
             # pprint(rows)
