@@ -1,5 +1,3 @@
-from pprint import pprint
-
 from src.class_DBManager import DBManager
 from src.config import config
 from src.utils import *
@@ -25,7 +23,6 @@ def main():
     # получение данныx о работодателях и их вакансиях с API hh.ru
     employers = get_hh_employers(employer_ids)
     vacancies = get_hh_vacancies(employer_ids)
-    # pprint(employers)
     # Создание и сохранение БД PostgreSQL
     create_database(db_name, params)
     print(f"БД {db_name} успешно создана")
@@ -36,6 +33,8 @@ def main():
     # работа с БД PostgreSQL
     DBManager.get_companies_and_vacancies_count()
     DBManager.get_all_vacancies()
+    DBManager.get_avg_salary()
+    DBManager.get_avg_salary_for_vacancy()
 
 
 if __name__ == '__main__':
@@ -43,3 +42,4 @@ if __name__ == '__main__':
     Яндекс, Ozon, Тензор, СБЕР, Банк ВТБ (ПАО),ПСБ (ПАО «Промсвязьбанк»), HeadHunter, VK, 2ГИС, Славнефть-ЯНОС.
     Процесс пошел, оставайтесь с нами""")
     main()
+    print("Данные получены. До скорых новых встреч.")
