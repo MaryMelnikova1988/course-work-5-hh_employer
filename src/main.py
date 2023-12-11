@@ -31,15 +31,23 @@ def main():
     print(f"В БД {db_name} успешно добавлены данные о работодателях и их вакансиях")
     print("Обратите внимание,в базе данных могут отсутствовать строки, если зарплата работодателями не указана")
     # работа с БД PostgreSQL
-    DBManager.get_companies_and_vacancies_count()
-    DBManager.get_all_vacancies()
-    DBManager.get_avg_salary()
-    DBManager.get_avg_salary_for_vacancy()
-    DBManager.get_vacancies_with_higher_salary()
-    print("""Пользователь сейчас будем получать список всех вакансий, в названии которых содержатся переданные в метод слова, например разработчик.
-    Введите, требуемое слово для поиска: """)
-    keyword =input().lower()
-    DBManager.get_vacancies_with_keyword(keyword)
+    database= DBManager()
+    database.get_companies_and_vacancies_count()
+    # database.get_all_vacancies()
+    # database.get_avg_salary()
+    # database.get_avg_salary_for_vacancy()
+
+    #
+    # DBManager.get_companies_and_vacancies_count()
+    # DBManager.get_all_vacancies()
+    # DBManager.get_avg_salary()
+    # DBManager.get_avg_salary_for_vacancy()
+    # DBManager.get_vacancies_with_higher_salary()
+    # print("""Пользователь сейчас будем получать список всех вакансий, в названии которых содержатся переданные в метод слова, например разработчик.
+    # Введите, требуемое слово для поиска: """)
+    # keyword =input().lower()
+    # DBManager.get_vacancies_with_keyword(keyword)
+    # database.get_vacancies_with_keyword()
 
 
 if __name__ == '__main__':
